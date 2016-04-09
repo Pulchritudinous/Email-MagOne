@@ -1,0 +1,24 @@
+<config>
+    <modules>
+        <Pulchritudinous_Email>
+            <version>1.0.0</version>
+        </Pulchritudinous_Email>
+    </modules>
+    <global>
+        <helpers>
+            <pulchemail>
+                <class>Pulchritudinous_Email_Helper</class>
+            </pulchemail>
+        </helpers>
+        <models>
+            <pulchemail>
+                <class>Pulchritudinous_Email_Model</class>
+            </pulchemail>
+        </models>
+        <blocks>
+            <pulchemail>
+                <class>Pulchritudinous_Email_Block</class>
+            </pulchemail>
+        </blocks>
+    </global>
+</config>

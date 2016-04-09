@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <Pulchritudinous_Email>
+            <active>true</active>
+            <codePool>community</codePool>
+        </Pulchritudinous_Email>
+    </modules>
+</config>
