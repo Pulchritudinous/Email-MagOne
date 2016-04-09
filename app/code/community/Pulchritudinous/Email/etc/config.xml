@@ -54,4 +54,12 @@
             </pulchemail>
         </blocks>
     </global>
+    <default>
+        <pulchemail>
+            <general>
+                <enabled>1</enabled>
+                <transporter>sparkpost</transporter>
+            </general>
+        </pulchemail>
+    </default>
 </config>

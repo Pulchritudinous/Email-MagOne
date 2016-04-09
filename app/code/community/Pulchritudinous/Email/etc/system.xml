@@ -63,8 +63,75 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </enabled>
+                        <transporter translate="label comment">
+                            <label>Transporter Service</label>
+                            <sort_order>20</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>pulchemail/source_transporter</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Select which email service you want to use as transporter for all emails</comment>
+                        </transporter>
                     </fields>
                 </general>
+                <transporter_sparkpost>
+                    <label>Sparkpost</label>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[<a href="https://postmarkapp.com/" target="_blank">https://postmarkapp.com/</a>]]></comment>
+                    <fields>
+                        <key>
+                            <label>API Key</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </key>
+                    </fields>
+                </transporter_sparkpost>
+                <transporter_postmark>
+                    <label>Postmark</label>
+                    <sort_order>300</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[<a href="https://postmarkapp.com/" target="_blank">https://postmarkapp.com/</a>]]></comment>
+                    <fields>
+                        <key>
+                            <label>API Key</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </key>
+                    </fields>
+                </transporter_postmark>
+                <transporter_mandrill>
+                    <label>Mandrill</label>
+                    <sort_order>400</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[<a href="https://www.mandrill.com/" target="_blank">https://www.mandrill.com/</a>]]></comment>
+                    <fields>
+                        <key>
+                            <label>API Key</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>obscure</frontend_type>
+                            <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </key>
+                    </fields>
+                </transporter_mandrill>
             </groups>
         </pulchemail>
     </sections>
