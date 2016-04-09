@@ -31,8 +31,64 @@
  * @module  Pulchritudinous
  * @author  Anton Samuelsson <samuelsson.anton@gmail.com>
  */
-class Pulchritudinous_Email_Helper_Data
-    extends Mage_Core_Helper_Abstract
+class Pulchritudinous_Email_Model_Transporter_Sparkpost
+    extends Pulchritudinous_Email_Model_Transporter_Abstract
 {
+    /**
+     *
+     *
+     * @return string
+     */
+    protected function _getUrl()
+    {
+        return 'https://api.sparkpost.com/api/v1/transmissions';
+    }
 
+    /**
+     *
+     *
+     * @return array
+     */
+    protected function _getExtraHeader()
+    {
+        $key = $this->_getKey();
+
+        return ["Authorization: {$key}"];
+    }
+
+    /**
+     *
+     *
+     * @return array
+     */
+    public function getRecipients()
+    {
+        $recipients = parent::getRecipients();
+
+        foreach ($recipients as &$recipient) {
+            $recipient = [
+                'address' => $recipient
+            ]
+        }
+
+        return $getRecipients;
+    }
+
+    /**
+     *
+     *
+     * @return string
+     */
+    protected function _getBody()
+    {
+        return json_encode([
+            'content' => [
+                'from'      => 'sandbox@sparkpostbox.com',
+                'subject'   => 'Thundercats are GO!!!',
+                'text'      => 'Sword of Omens, give me sight BEYOND sight',
+            ],
+            'recipients'    => $this->getRecipients()
+        ]);
+    }
 }
+
