@@ -38,7 +38,7 @@ Class Pulchritudinous_Email_Model_Source_Transporter
         foreach ($transporters as $key => $val) {
             $options[] = [
                 'label' => $val,
-                'key'   => $key,
+                'value' => $key,
             ];
         }
 
