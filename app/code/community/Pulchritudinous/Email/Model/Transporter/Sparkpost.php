@@ -68,7 +68,7 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
         foreach ($recipients as &$recipient) {
             $recipient = [
                 'address' => $recipient
-            ]
+            ];
         }
 
         return $getRecipients;
