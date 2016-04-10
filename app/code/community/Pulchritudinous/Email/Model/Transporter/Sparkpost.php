@@ -51,7 +51,7 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
      */
     protected function _getExtraHeader()
     {
-        $key = $this->_getKey();
+        $key = $this->getConfig()->getKey();
 
         return ["Authorization: {$key}"];
     }
@@ -65,13 +65,23 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     {
         $recipients = parent::getRecipients();
 
-        foreach ($recipients as &$recipient) {
+        foreach ($recipients as $email => &$recipient) {
             $recipient = [
-                'address' => $recipient
+                'address' => $email
             ];
         }
 
-        return $getRecipients;
+        return array_values($recipients);
+    }
+
+    /**
+     *
+     *
+     * @return string
+     */
+    protected function _getFormat()
+    {
+        return ($this->_isHtml) ? 'html' : 'text';
     }
 
     /**
@@ -83,9 +93,9 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     {
         return json_encode([
             'content' => [
-                'from'      => 'sandbox@sparkpostbox.com',
-                'subject'   => 'Thundercats are GO!!!',
-                'text'      => 'Sword of Omens, give me sight BEYOND sight',
+                'from'              => $this->_getFrom()->getEmail(),
+                'subject'           => $this->getSubject(),
+                $this->_getFormat() => $this->getBody()
             ],
             'recipients'    => $this->getRecipients()
         ]);

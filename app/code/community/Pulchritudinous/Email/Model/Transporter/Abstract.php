@@ -32,6 +32,7 @@
  * @author  Anton Samuelsson <samuelsson.anton@gmail.com>
  */
 abstract class Pulchritudinous_Email_Model_Transporter_Abstract
+    extends Varien_Object
 {
     /**
      * Transporter settings
@@ -39,6 +40,27 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      * @var mixed
      */
     protected $_settings;
+
+    /**
+     *
+     *
+     * @var array
+     */
+    protected $_recipients = [];
+
+    /**
+     *
+     *
+     * @var mixed
+     */
+    protected $_from;
+
+    /**
+     *
+     *
+     * @var boolean
+     */
+    protected $_isHtml = false;
 
     /**
      *
@@ -57,6 +79,85 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     public function setConfig($config)
     {
         $this->_settings = $config;
+
+        return $this;
+    }
+
+    /**
+     *
+     *
+     * @param string $email
+     * @param string $name
+     *
+     * @return Pulchritudinous_Email_Model_Transporter_Abstract
+     */
+    public function addTo($email, $name)
+    {
+        $this->_recipients[$email] = $name;
+
+        return $this;
+    }
+
+    /**
+     *
+     *
+     * @param string $email
+     * @param string $name
+     *
+     * @return Pulchritudinous_Email_Model_Transporter_Abstract
+     */
+    public function setFrom($email, $name)
+    {
+        $this->_from = new Varien_Object(
+            [
+                'name'  => $name,
+                'email' => $email,
+            ]
+        );
+    }
+
+    /**
+     *
+     *
+     * @return Varien_Object
+     */
+    protected function _getFrom()
+    {
+        $from = $this->_from;
+
+        if ($from instanceof Varien_Object) {
+            return $from;
+        }
+
+        return new Varien_Object();
+    }
+
+    /**
+     *
+     *
+     * @param string $value
+     *
+     * @return Pulchritudinous_Email_Model_Transporter_Abstract
+     */
+    public function setBodyText($value)
+    {
+        $this->_isHtml = false;
+        $this->setBody($value);
+
+        return $this;
+    }
+
+    /**
+     *
+     *
+     * @param string $value
+     *
+     * @return Pulchritudinous_Email_Model_Transporter_Abstract
+     */
+    public function setBodyHTML($value)
+    {
+        $this->_isHtml = true;
+        $this->setBody($value);
 
         return $this;
     }
@@ -101,6 +202,11 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
         );
     }
 
+    public function getSubject()
+    {
+        return $this->getOrigModel()->getSubject();
+    }
+
     /**
      *
      *
@@ -122,7 +228,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      */
     public function getRecipients()
     {
-        return [];
+        return $this->_recipients;
     }
 
     /**
@@ -137,13 +243,15 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
 
         $curl->setConfig(['header' => false] );
 
-        $response = $curl->write(
+        $curl->write(
             Zend_Http_Client::POST,
             $this->_getUrl(),
             $httpVer,
             $this->_getHeader(),
             $this->_getBody()
         );
+
+        $response = $curl->read();
 
         return $response;
     }
@@ -153,7 +261,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      *
      * @return mixed
      */
-    public function sendEmail()
+    public function send()
     {
         return $this->_sendEmail();
     }

@@ -51,7 +51,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
      */
     protected function _getExtraHeader()
     {
-        $key = $this->_getKey();
+        $key = $this->getConfig()->getKey();
 
         return ["X-Postmark-Server-Token: {$key}"];
     }
@@ -67,12 +67,14 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
 
         foreach ($this->getRecipients() as $recipient) {
             $body[] = [
-                'From'      => 'name@example.com',
+                'From'      => $this->getOrigModel()->getFromEmail(),
                 'To'        => $recipient,
-                'Subject'   => 'Thundercats are GO!!!',
-                'HtmlBody'  => 'Sword of Omens, give me sight BEYOND sight',
+                'Subject'   => $this->getOrigModel()->getSubject(),
+                'HtmlBody'  => $this->getOrigModel()->getBody()
             ];
         }
+
+        return json_encode($body);
     }
 }
 

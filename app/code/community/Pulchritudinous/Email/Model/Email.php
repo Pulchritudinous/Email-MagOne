@@ -7,6 +7,7 @@
  * @author  Puchtritudinous
  */
 class Pulchritudinous_Email_Model_Email
+    extends Varien_Object
 {
     /**
      * Transporter Model
@@ -43,4 +44,20 @@ class Pulchritudinous_Email_Model_Email
 
         $this->_transporter->setConfig($settings);
     }
+
+    public function getTransporter()
+    {
+        return $this->_transporter;
+    }
+
+    /**
+     *
+     */
+    public function send()
+    {
+        $this->_transporter
+            ->setOrigModel($this->getOrigModel())
+            ->send();
+    }
 }
+
