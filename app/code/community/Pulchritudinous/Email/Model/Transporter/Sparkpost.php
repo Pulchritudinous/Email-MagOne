@@ -67,7 +67,10 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
 
         foreach ($recipients as $email => &$recipient) {
             $recipient = [
-                'address' => $email
+                'address' => [
+                    'email' => $email,
+                    'name'  => $recipient
+                ]
             ];
         }
 
@@ -93,7 +96,10 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     {
         return json_encode([
             'content' => [
-                'from'              => $this->_getFrom()->getEmail(),
+                'from'              => [
+                    'name'  => $this->_getFrom()->getName(),
+                    'email' => $this->_getFrom()->getEmail(),
+                ],
                 'subject'           => $this->getSubject(),
                 $this->_getFormat() => $this->getBody()
             ],

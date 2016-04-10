@@ -78,11 +78,12 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     protected function _getBody()
     {
         $body = [];
+        $from = "{$this->_getFrom()->getName()} <{$this->_getFrom()->getEmail()}>";
 
         foreach ($this->getRecipients() as $email => $name) {
             $body[] = [
-                'From'              => $this->_getFrom()->getEmail(),
-                'To'                => $email,
+                'From'              => $from,
+                'To'                => "{$name} <{$email}>",
                 'Subject'           => $this->getSubject(),
                 $this->_getFormat() => $this->getBody()
             ];
