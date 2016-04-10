@@ -34,6 +34,13 @@
 abstract class Pulchritudinous_Email_Model_Transporter_Abstract
 {
     /**
+     * Transporter settings
+     *
+     * @var mixed
+     */
+    protected $_settings;
+
+    /**
      *
      *
      * @return string
@@ -41,13 +48,41 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     abstract protected function _getUrl();
 
     /**
+     * Set transporter configuration
      *
+     * @param Varien_Object $config
      *
-     * @return string
+     * @return Pulchritudinous_Email_Model_Transporter_Abstract
+     */
+    public function setConfig($config)
+    {
+        $this->_settings = $config;
+
+        return $this;
+    }
+
+    /**
+     * Get transporter configuration
+     *
+     * @return Varien_Object
+     */
+    public function getConfig()
+    {
+        return $this->_settings;
+    }
+
+    /**
+     * Get API Key
+     *
+     * @return string|null
      */
     protected function _getKey()
     {
-        return '';
+        if (!$this->getConfig()) {
+            return null;
+        }
+
+        return $this->getConfig()->getKey();
     }
 
     /**
