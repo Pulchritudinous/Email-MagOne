@@ -41,6 +41,10 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
      */
     protected function _getUrl()
     {
+        if (count($this->getRecipients()) > 1) {
+            return 'https://api.postmarkapp.com/email/batch';
+        }
+
         return 'https://api.postmarkapp.com/email';
     }
 
@@ -61,17 +65,31 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
      *
      * @return string
      */
+    protected function _getFormat()
+    {
+        return ($this->_isHtml) ? 'HtmlBody' : 'TextBody';
+    }
+
+    /**
+     *
+     *
+     * @return string
+     */
     protected function _getBody()
     {
         $body = [];
 
-        foreach ($this->getRecipients() as $recipient) {
+        foreach ($this->getRecipients() as $email => $name) {
             $body[] = [
-                'From'      => $this->getOrigModel()->getFromEmail(),
-                'To'        => $recipient,
-                'Subject'   => $this->getOrigModel()->getSubject(),
-                'HtmlBody'  => $this->getOrigModel()->getBody()
+                'From'              => $this->_getFrom()->getEmail(),
+                'To'                => $email,
+                'Subject'           => $this->getSubject(),
+                $this->_getFormat() => $this->getBody()
             ];
+        }
+
+        if (count($body) == 1) {
+            $body = reset($body);
         }
 
         return json_encode($body);
