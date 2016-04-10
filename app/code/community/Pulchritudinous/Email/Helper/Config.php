@@ -66,6 +66,6 @@ class Pulchritudinous_Email_Helper_Config
             $store = Mage::app()->getStore()->getId();
         }
 
-        return (bool)Mage::getStoreConfig("pulchemail/general/enabled", $store)
+        return (bool)Mage::getStoreConfigFlag("pulchemail/general/enabled", $store);
     }
 }
