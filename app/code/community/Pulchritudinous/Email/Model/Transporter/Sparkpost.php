@@ -100,5 +100,31 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
             'recipients'    => $this->getRecipients()
         ]);
     }
+
+    /**
+     *
+     *
+     * @param  string $response
+     *
+     * @throws Mage_Core_Exception
+     *
+     * @return boolean
+     */
+    protected function _processResponse($response)
+    {
+        if (!$this->_isJson($response)) {
+            Mage::throwException('Unable to send email');
+        }
+
+        $response =  new Varien_Object(
+            json_decode($response, true)
+        );
+
+        if ($response->hasData('errors')) {
+            Mage::throwException($response->getData('errors/0/description'));
+        }
+
+        return true;
+    }
 }
 

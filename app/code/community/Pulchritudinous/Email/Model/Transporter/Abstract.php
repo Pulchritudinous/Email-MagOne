@@ -224,6 +224,17 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     /**
      *
      *
+     * @param  string $response
+     *
+     * @throws Mage_Core_Exception
+     *
+     * @return boolean
+     */
+    abstract protected function _processResponse($response);
+
+    /**
+     *
+     *
      * @return array
      */
     public function getRecipients()
@@ -259,11 +270,32 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     /**
      *
      *
+     * @param  string $string
+     *
+     * @return boolean
+     */
+    protected function _isJson($string)
+    {
+        if (!is_string($string)) {
+            return false;
+        }
+
+        json_decode($string);
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
+
+    /**
+     *
+     *
      * @return mixed
      */
     public function send()
     {
-        return $this->_sendEmail();
+        if (!($response = $this->_sendEmail())) {
+            Mage::throwException('Unable to send email');
+        }
+
+        return $this->_processResponse($response);
     }
 }
 
