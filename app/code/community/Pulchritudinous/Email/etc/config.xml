@@ -47,6 +47,13 @@
             <pulchemail>
                 <class>Pulchritudinous_Email_Model</class>
             </pulchemail>
+            <core>
+                <rewrite>
+                    <email>Pulchritudinous_Email_Model_Core_Email</email>
+                    <email_template>Pulchritudinous_Email_Model_Core_Email_Template</email_template>
+                    <email_queue>Pulchritudinous_Email_Model_Core_Email_Queue</email_queue>
+                </rewrite>
+            </core>
         </models>
         <blocks>
             <pulchemail>
