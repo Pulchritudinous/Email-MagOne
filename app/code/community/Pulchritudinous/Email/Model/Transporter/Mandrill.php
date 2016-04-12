@@ -93,7 +93,6 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
         return json_encode([
             'key'       => $this->getConfig()->getKey(),
             'message'   => [
-                $this->_getFormat() => $this->getBody(),
                 'subject'           => $this->getSubject(),
                 'from_name'         => $this->_getFrom()->getName(),
                 'from_email'        => $this->_getFrom()->getEmail(),
