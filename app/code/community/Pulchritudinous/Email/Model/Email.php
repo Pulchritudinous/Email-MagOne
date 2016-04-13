@@ -45,6 +45,11 @@ class Pulchritudinous_Email_Model_Email
         $this->_transporter->setConfig($settings);
     }
 
+    /**
+     *
+     *
+     * @return Pulchritudinous_Email_Model_Transporter_Abstract
+     */
     public function getTransporter()
     {
         return $this->_transporter;
