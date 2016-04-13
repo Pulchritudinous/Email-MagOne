@@ -23,9 +23,9 @@ Class Pulchritudinous_Email_Model_Core_Email_Template
      */
     public function getMail()
     {
-        return Mage::getModel('pulchemail/email')
-            ->getTransporter()
-            ->setOrigModel($this);
+        $mail = parent::getMail();
+        $mail::setDefaultTransport(new Pulchritudinous_Email_Model_Transporter_Mandrill);
+        return $mail;
     }
 
     /**

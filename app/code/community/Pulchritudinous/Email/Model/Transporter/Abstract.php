@@ -32,7 +32,7 @@
  * @author  Anton Samuelsson <samuelsson.anton@gmail.com>
  */
 abstract class Pulchritudinous_Email_Model_Transporter_Abstract
-    extends Varien_Object
+    extends Zend_Mail_Transport_Abstract
 {
     /**
      * Transporter settings
@@ -44,30 +44,27 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     /**
      *
      *
-     * @var array
-     */
-    protected $_recipients = [];
-
-    /**
-     *
-     *
-     * @var mixed
-     */
-    protected $_from;
-
-    /**
-     *
-     *
-     * @var boolean
-     */
-    protected $_isHtml = false;
-
-    /**
-     *
-     *
      * @return string
      */
     abstract protected function _getUrl();
+
+     /**
+     *
+     *
+     * @return array
+     */
+    abstract protected function _getExtraHeader();
+
+     /**
+     *
+     *
+     * @param  string $response
+     *
+     * @throws Mage_Core_Exception
+     *
+     * @return boolean
+     */
+    abstract protected function _processResponse($response);
 
     /**
      * Set transporter configuration
@@ -79,85 +76,6 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     public function setConfig($config)
     {
         $this->_settings = $config;
-
-        return $this;
-    }
-
-    /**
-     *
-     *
-     * @param string $email
-     * @param string $name
-     *
-     * @return Pulchritudinous_Email_Model_Transporter_Abstract
-     */
-    public function addTo($email, $name)
-    {
-        $this->_recipients[$email] = $name;
-
-        return $this;
-    }
-
-    /**
-     *
-     *
-     * @param string $email
-     * @param string $name
-     *
-     * @return Pulchritudinous_Email_Model_Transporter_Abstract
-     */
-    public function setFrom($email, $name)
-    {
-        $this->_from = new Varien_Object(
-            [
-                'name'  => $name,
-                'email' => $email,
-            ]
-        );
-    }
-
-    /**
-     *
-     *
-     * @return Varien_Object
-     */
-    protected function _getFrom()
-    {
-        $from = $this->_from;
-
-        if ($from instanceof Varien_Object) {
-            return $from;
-        }
-
-        return new Varien_Object();
-    }
-
-    /**
-     *
-     *
-     * @param string $value
-     *
-     * @return Pulchritudinous_Email_Model_Transporter_Abstract
-     */
-    public function setBodyText($value)
-    {
-        $this->_isHtml = false;
-        $this->setBody($value);
-
-        return $this;
-    }
-
-    /**
-     *
-     *
-     * @param string $value
-     *
-     * @return Pulchritudinous_Email_Model_Transporter_Abstract
-     */
-    public function setBodyHTML($value)
-    {
-        $this->_isHtml = true;
-        $this->setBody($value);
 
         return $this;
     }
@@ -202,46 +120,6 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
         );
     }
 
-    public function getSubject()
-    {
-        return $this->getOrigModel()->getSubject();
-    }
-
-    /**
-     *
-     *
-     * @return string
-     */
-    abstract protected function _getBody();
-
-    /**
-     *
-     *
-     * @return string
-     */
-    abstract protected function _getExtraHeader();
-
-    /**
-     *
-     *
-     * @param  string $response
-     *
-     * @throws Mage_Core_Exception
-     *
-     * @return boolean
-     */
-    abstract protected function _processResponse($response);
-
-    /**
-     *
-     *
-     * @return array
-     */
-    public function getRecipients()
-    {
-        return $this->_recipients;
-    }
-
     /**
      *
      *
@@ -282,20 +160,6 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
 
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
-    }
-
-    /**
-     *
-     *
-     * @return mixed
-     */
-    public function send()
-    {
-        if (!($response = $this->_sendEmail())) {
-            Mage::throwException('Unable to send email');
-        }
-
-        return $this->_processResponse($response);
     }
 }
 

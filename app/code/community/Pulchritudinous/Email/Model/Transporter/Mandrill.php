@@ -57,49 +57,11 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
     /**
      *
      *
-     * @return array
-     */
-    public function getRecipients()
-    {
-        $recipients = parent::getRecipients();
-
-        foreach ($recipients as $email => &$recipient) {
-            $recipient = [
-                'email' => $email,
-                'name'  => $recipient
-            ];
-        }
-
-        return array_values($recipients);
-    }
-
-    /**
-     *
-     *
      * @return string
      */
     protected function _getFormat()
     {
         return ($this->_isHtml) ? 'html' : 'text';
-    }
-
-    /**
-     *
-     *
-     * @return string
-     */
-    protected function _getBody()
-    {
-        return json_encode([
-            'key'       => $this->getConfig()->getKey(),
-            'message'   => [
-                'subject'           => $this->getSubject(),
-                'from_name'         => $this->_getFrom()->getName(),
-                'from_email'        => $this->_getFrom()->getEmail(),
-                'to'                => $this->getRecipients(),
-                $this->_getFormat() => $this->getBody()
-            ],
-        ]);
     }
 
     /**
@@ -126,6 +88,35 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
         }
 
         return true;
+    }
+
+    public function setOrigModel()
+    {
+        return $this;
+    }
+
+    public function _sendMail()
+    {
+        $mail = $this->_mail;
+
+        $test = Zend_Mime_Decode::splitMessage('To', $mail->getHeaders(), $null);
+
+        $headers = $mail->getHeaders();
+
+        $subject = $headers['Subject'][0];
+        $charset = $mail->getCharset();
+
+        $prefix          = '=?' . $charset . '?B?';
+        $suffix          = '?=';
+
+        $apa            = substr($subject, strlen($prefix), strlen($subject)-strlen($suffix));
+
+        dahbug::dump(base64_decode($apa));
+
+        dahbug::dump($mail->getRecipients());
+        dahbug::dump($mail->getHeaders());
+        dahbug::dump($this->body);
+        dahbug::dump($this->header);
     }
 }
 
