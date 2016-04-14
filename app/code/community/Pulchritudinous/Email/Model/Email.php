@@ -49,15 +49,5 @@ class Pulchritudinous_Email_Model_Email
     {
         return $this->_transporter;
     }
-
-    /**
-     *
-     */
-    public function send()
-    {
-        $this->_transporter
-            ->setOrigModel($this->getOrigModel())
-            ->send();
-    }
 }
 

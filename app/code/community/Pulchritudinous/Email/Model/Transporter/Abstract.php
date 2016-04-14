@@ -44,6 +44,13 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     /**
      *
      *
+     * @var array
+     */
+    protected $_preparedHeaders = [];
+
+    /**
+     *
+     *
      * @return string
      */
     abstract protected function _getUrl();
@@ -107,6 +114,120 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     /**
      *
      *
+     * @param array $headers
+     */
+    protected function _prepareHeaders($headers)
+    {
+        foreach ($headers as $header => $content) {
+            if (isset($content['append'])) {
+                unset($content['append']);
+            }
+
+            array_walk(
+                $content,
+                [$this, '_decodeBase64MimeCallback']
+            );
+
+            $this->_prepareHeaders[strtolower($header)] = implode(
+                ',',
+                $content
+            );
+        }
+
+        dahbug::dump($this->_prepareHeaders);
+
+        return $this;
+    }
+
+    /**
+     *
+     *
+     * @return Varien_Object
+     */
+    protected function _getFrom()
+    {
+        preg_match('/(.*)<(.*)>/', $this->_prepareHeaders['from'], $matches);
+
+        list(, $name, $email) = $matches;
+
+        return new Varien_Object([
+            'name'      => $name,
+            'email'     => $email,
+        ]);
+    }
+
+    /**
+     *
+     *
+     * @return string
+     */
+    protected function _getSubject()
+    {
+        return $this->_prepareHeaders['subject'];
+    }
+
+    /**
+     *
+     *
+     * @return array
+     */
+    protected function _getRecipients()
+    {
+        $recipients = [];
+
+        foreach (explode(',', $this->_prepareHeaders['to']) as $recipient) {
+            preg_match('/(.*)<(.*)>/', $recipient, $matches);
+            list(, $name, $email) = $matches;
+
+            $recipients[] = [
+                'email' => $email,
+                'name'  => $name
+            ];
+        }
+
+        return $recipients;
+    }
+
+    /**
+     *
+     *
+     * @param  Zend_Mail $mail
+     */
+    public function send(Zend_Mail $mail)
+    {
+        $this->_mail    = $mail;
+        $mime           = $mail->getMime();
+        $message        = new Zend_Mime_Message();
+
+        $this->_buildBody();
+
+        $message->setParts($this->_parts);
+        $message->setMime($mime);
+
+        $this->body = $message->generateMessage($this->EOL);
+
+        $this->_prepareHeaders($mail->getHeaders());
+
+        return $this->_processResponse($this->_sendMail());
+    }
+
+    /**
+     *
+     *
+     * @return string
+     */
+    protected function _getBody()
+    {
+        $text = ($this->_mail->getBodyText())
+            ? ($this->_mail->getBodyText(true))
+            : ($this->_mail->getBodyHtml(true));
+
+        return Zend_Mime_Decode::decodeQuotedPrintable($text);
+    }
+
+    /**
+     *
+     *
      * @return array
      */
     protected function _getHeader()
@@ -118,31 +239,6 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
                 'Content-Type: application/json',
             ]
         );
-    }
-
-    /**
-     *
-     *
-     * @return mixed
-     */
-    protected function _sendEmail()
-    {
-        $curl       = new Varien_Http_Adapter_Curl();
-        $httpVer    = Zend_Http_Client::HTTP_1;
-
-        $curl->setConfig(['header' => false] );
-
-        $curl->write(
-            Zend_Http_Client::POST,
-            $this->_getUrl(),
-            $httpVer,
-            $this->_getHeader(),
-            $this->_getBody()
-        );
-
-        $response = $curl->read();
-
-        return $response;
     }
 
     /**
@@ -160,6 +256,71 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
 
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
+    }
+
+    /**
+     *
+     *
+     * @param string $string
+     */
+    protected function _decodeBase64MimeCallback(&$string)
+    {
+        $string = $this->_decodeBase64Mime($string);
+    }
+
+    /**
+     *
+     *
+     * @param  string $string
+     *
+     * @return $string
+     */
+    protected function _decodeBase64Mime($string)
+    {
+        if (preg_match('/[a-zA-Z0-9+\/]+={0,2}/', $string)) {
+            $string = preg_replace_callback(
+                '/([\w\d]+=+)/',
+                [$this, '_base64DecodeCallback'],
+                preg_replace('/(=\?[\w\d-]+\?B\?([\w\d]+=+)\?=)/', '\2', $string)
+            );
+        }
+
+        return $string;
+    }
+
+    /**
+     *
+     *
+     * @param  array $data
+     *
+     * @return string
+     */
+    protected function _base64DecodeCallback(array $data)
+    {
+        return base64_decode($data[0]);
+    }
+
+    /**
+     *
+     *
+     * @return string
+     */
+    public function _sendMail()
+    {
+        $curl       = new Varien_Http_Adapter_Curl();
+        $httpVer    = Zend_Http_Client::HTTP_1;
+
+        $curl->setConfig(['header' => false]);
+
+        $curl->write(
+            Zend_Http_Client::POST,
+            $this->_getUrl(),
+            $httpVer,
+            $this->_getHeader(),
+            $this->_getAssembledMessage()
+        );
+
+        return dahbug::dump($curl->read());
     }
 }
 

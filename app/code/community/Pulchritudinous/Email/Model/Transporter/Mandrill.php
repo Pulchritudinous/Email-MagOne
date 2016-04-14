@@ -34,6 +34,15 @@
 class Pulchritudinous_Email_Model_Transporter_Mandrill
     extends Pulchritudinous_Email_Model_Transporter_Abstract
 {
+    public function __construct()
+    {
+        $config         = Mage::helper('pulchemail/config');
+        $transporter    = $config->getTransporter();
+        $settings       = $config->getTransporterSettings('mandrill');
+
+        $this->setConfig($settings);
+    }
+
     /**
      *
      *
@@ -61,7 +70,7 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
      */
     protected function _getFormat()
     {
-        return ($this->_isHtml) ? 'html' : 'text';
+        return ($this->_mail->getBodyHtml()) ? 'html' : 'text';
     }
 
     /**
@@ -90,33 +99,23 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
         return true;
     }
 
-    public function setOrigModel()
+    /**
+     *
+     *
+     * @return string
+     */
+    protected function _getAssembledMessage()
     {
-        return $this;
-    }
-
-    public function _sendMail()
-    {
-        $mail = $this->_mail;
-
-        $test = Zend_Mime_Decode::splitMessage('To', $mail->getHeaders(), $null);
-
-        $headers = $mail->getHeaders();
-
-        $subject = $headers['Subject'][0];
-        $charset = $mail->getCharset();
-
-        $prefix          = '=?' . $charset . '?B?';
-        $suffix          = '?=';
-
-        $apa            = substr($subject, strlen($prefix), strlen($subject)-strlen($suffix));
-
-        dahbug::dump(base64_decode($apa));
-
-        dahbug::dump($mail->getRecipients());
-        dahbug::dump($mail->getHeaders());
-        dahbug::dump($this->body);
-        dahbug::dump($this->header);
+        return json_encode([
+            'key'       => $this->getConfig()->getKey(),
+            'message'   => [
+                'subject'           => $this->_getSubject(),
+                'from_name'         => $this->_getFrom()->getName(),
+                'from_email'        => $this->_getFrom()->getEmail(),
+                'to'                => $this->_getRecipients(),
+                $this->_getFormat() => $this->_getBody()
+            ],
+        ]);
     }
 }
 
