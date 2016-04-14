@@ -34,6 +34,13 @@
 class Pulchritudinous_Email_Model_Transporter_Postmark
     extends Pulchritudinous_Email_Model_Transporter_Abstract
 {
+     /**
+     *
+     *
+     * @var string
+     */
+    protected $_code = 'postmark';
+
     /**
      *
      *
@@ -63,7 +70,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
      */
     protected function _getFormat()
     {
-        return ($this->_isHtml) ? 'HtmlBody' : 'TextBody';
+        return ($this->_mail->getBodyHtml()) ? 'HtmlBody' : 'TextBody';
     }
 
     /**
@@ -73,13 +80,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
      */
     public function getRecipients()
     {
-        $recipients = parent::getRecipients();
-
-        foreach ($recipients as $email => &$recipient) {
-            $recipient = "{$name} <{$recipient}>";
-        }
-
-        return implode(',', $recipients);
+        return $this->_prepareHeaders['to'];
     }
 
     /**
@@ -87,15 +88,15 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
      *
      * @return string
      */
-    protected function _getBody()
+    protected function _getAssembledMessage()
     {
         $from = "{$this->_getFrom()->getName()} <{$this->_getFrom()->getEmail()}>";
 
         return json_encode([
             'From'              => $from,
-            'To'                => $this->getRecipients(),
-            'Subject'           => $this->getSubject(),
-            $this->_getFormat() => $this->getBody()
+            'To'                => $this->_getRecipients(),
+            'Subject'           => $this->_getSubject(),
+            $this->_getFormat() => $this->_getBody()
         ]);
     }
 

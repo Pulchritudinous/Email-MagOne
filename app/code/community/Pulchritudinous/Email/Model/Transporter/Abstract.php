@@ -55,12 +55,19 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      */
     abstract protected function _getUrl();
 
-     /**
+    /**
      *
      *
      * @return array
      */
     abstract protected function _getExtraHeader();
+
+    /**
+     *
+     *
+     * @return string
+     */
+    abstract protected function _getAssembledMessage();
 
      /**
      *
@@ -72,6 +79,25 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      * @return boolean
      */
     abstract protected function _processResponse($response);
+
+    /**
+     *
+     *
+     * @var string
+     */
+    protected $_code;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $config         = Mage::helper('pulchemail/config');
+        $transporter    = $config->getTransporter();
+        $settings       = $config->getTransporterSettings($this->_code);
+
+        $this->setConfig($settings);
+    }
 
     /**
      * Set transporter configuration
@@ -133,8 +159,6 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
                 $content
             );
         }
-
-        dahbug::dump($this->_prepareHeaders);
 
         return $this;
     }
@@ -320,7 +344,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
             $this->_getAssembledMessage()
         );
 
-        return dahbug::dump($curl->read());
+        return $curl->read();
     }
 }
 

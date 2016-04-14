@@ -34,14 +34,12 @@
 class Pulchritudinous_Email_Model_Transporter_Mandrill
     extends Pulchritudinous_Email_Model_Transporter_Abstract
 {
-    public function __construct()
-    {
-        $config         = Mage::helper('pulchemail/config');
-        $transporter    = $config->getTransporter();
-        $settings       = $config->getTransporterSettings('mandrill');
-
-        $this->setConfig($settings);
-    }
+    /**
+     *
+     *
+     * @var string
+     */
+    protected $_code = 'mandrill';
 
     /**
      *

@@ -37,6 +37,13 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     /**
      *
      *
+     * @var string
+     */
+    protected $_code = 'sparkpost';
+
+    /**
+     *
+     *
      * @return string
      */
     protected function _getUrl()
@@ -65,12 +72,9 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     {
         $recipients = parent::getRecipients();
 
-        foreach ($recipients as $email => &$recipient) {
-            $recipient = [
-                'address' => [
-                    'email' => $email,
-                    'name'  => $recipient
-                ]
+        foreach ($recipients as &$recipient) {
+            $recipient[] = [
+                'address' => $recipient
             ];
         }
 
@@ -96,14 +100,14 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     {
         return json_encode([
             'content' => [
-                'from'              => [
+                'from'  => [
                     'name'  => $this->_getFrom()->getName(),
                     'email' => $this->_getFrom()->getEmail(),
                 ],
-                'subject'           => $this->getSubject(),
-                $this->_getFormat() => $this->getBody()
+                'subject'           => $this->_getSubject(),
+                $this->_getFormat() => $this->_getBody()
             ],
-            'recipients'    => $this->getRecipients()
+            'recipients'    => $this->_getRecipients()
         ]);
     }
 
