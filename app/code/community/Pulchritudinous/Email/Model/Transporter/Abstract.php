@@ -151,7 +151,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
 
             array_walk(
                 $content,
-                [$this, '_decodeBase64MimeCallback']
+                'iconv_mime_decode'
             );
 
             $this->_prepareHeaders[strtolower($header)] = implode(
@@ -280,48 +280,6 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
 
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
-    }
-
-    /**
-     *
-     *
-     * @param string $string
-     */
-    protected function _decodeBase64MimeCallback(&$string)
-    {
-        $string = $this->_decodeBase64Mime($string);
-    }
-
-    /**
-     *
-     *
-     * @param  string $string
-     *
-     * @return $string
-     */
-    protected function _decodeBase64Mime($string)
-    {
-        if (preg_match('/[a-zA-Z0-9+\/]+={0,2}/', $string)) {
-            $string = preg_replace_callback(
-                '/([\w\d]+=+)/',
-                [$this, '_base64DecodeCallback'],
-                preg_replace('/(=\?[\w\d-]+\?B\?([\w\d]+=+)\?=)/', '\2', $string)
-            );
-        }
-
-        return $string;
-    }
-
-    /**
-     *
-     *
-     * @param  array $data
-     *
-     * @return string
-     */
-    protected function _base64DecodeCallback(array $data)
-    {
-        return base64_decode($data[0]);
     }
 
     /**
