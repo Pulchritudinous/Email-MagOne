@@ -34,6 +34,15 @@
 class Pulchritudinous_Email_Model_Transporter_Mandrill
     extends Pulchritudinous_Email_Model_Transporter_Abstract
 {
+    public function __construct()
+    {
+        $config         = Mage::helper('pulchemail/config');
+        $transporter    = $config->getTransporter();
+        $settings       = $config->getTransporterSettings('mandrill');
+
+        $this->setConfig($settings);
+    }
+
     /**
      *
      *
@@ -57,49 +66,11 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
     /**
      *
      *
-     * @return array
-     */
-    public function getRecipients()
-    {
-        $recipients = parent::getRecipients();
-
-        foreach ($recipients as $email => &$recipient) {
-            $recipient = [
-                'email' => $email,
-                'name'  => $recipient
-            ];
-        }
-
-        return array_values($recipients);
-    }
-
-    /**
-     *
-     *
      * @return string
      */
     protected function _getFormat()
     {
-        return ($this->_isHtml) ? 'html' : 'text';
-    }
-
-    /**
-     *
-     *
-     * @return string
-     */
-    protected function _getBody()
-    {
-        return json_encode([
-            'key'       => $this->getConfig()->getKey(),
-            'message'   => [
-                'subject'           => $this->getSubject(),
-                'from_name'         => $this->_getFrom()->getName(),
-                'from_email'        => $this->_getFrom()->getEmail(),
-                'to'                => $this->getRecipients(),
-                $this->_getFormat() => $this->getBody()
-            ],
-        ]);
+        return ($this->_mail->getBodyHtml()) ? 'html' : 'text';
     }
 
     /**
@@ -126,6 +97,25 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
         }
 
         return true;
+    }
+
+    /**
+     *
+     *
+     * @return string
+     */
+    protected function _getAssembledMessage()
+    {
+        return json_encode([
+            'key'       => $this->getConfig()->getKey(),
+            'message'   => [
+                'subject'           => $this->_getSubject(),
+                'from_name'         => $this->_getFrom()->getName(),
+                'from_email'        => $this->_getFrom()->getEmail(),
+                'to'                => $this->_getRecipients(),
+                $this->_getFormat() => $this->_getBody()
+            ],
+        ]);
     }
 }
 

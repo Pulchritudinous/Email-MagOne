@@ -12,42 +12,12 @@ Class Pulchritudinous_Email_Model_Core_Email_Template
     /**
      *
      *
-     * @var string
-     */
-    protected $_processedSubject = '';
-
-    /**
-     *
-     *
      * @return Pulchritudinous_Email_Model_Transporter_Abstract
      */
     public function getMail()
     {
-        return Mage::getModel('pulchemail/email')
-            ->getTransporter()
-            ->setOrigModel($this);
-    }
-
-    /**
-     *
-     *
-     * @return array
-     */
-    public function getProcessedTemplateSubject(array $variables)
-    {
-        $result = parent::getProcessedTemplateSubject($variables);
-
-        $this->_processedSubject = $result;
-        return $result;
-    }
-
-    /**
-     *
-     *
-     * @return string
-     */
-    public function getSubject()
-    {
-        return $this->_processedSubject;
+        $mail = parent::getMail();
+        $mail::setDefaultTransport(new Pulchritudinous_Email_Model_Transporter_Mandrill);
+        return $mail;
     }
 }
