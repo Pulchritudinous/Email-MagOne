@@ -12,12 +12,19 @@ Class Pulchritudinous_Email_Model_Core_Email_Template
     /**
      *
      *
-     * @return Pulchritudinous_Email_Model_Transporter_Abstract
+     * @return Zend_Mail
      */
     public function getMail()
     {
-        $mail = parent::getMail();
-        $mail::setDefaultTransport(new Pulchritudinous_Email_Model_Transporter_Mandrill);
+        $config = Mage::helper('pulchemail/config');
+        $helper = Mage::helper('pulchemail');
+        $mail   = parent::getMail();
+
+        if ($config->isEnabled()) {
+            $mail::setDefaultTransport($helper->getActiveTransporter());
+        }
+
         return $mail;
     }
 }
+

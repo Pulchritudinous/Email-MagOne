@@ -10,7 +10,8 @@ Class Pulchritudinous_Email_Model_Core_Email
     extends Mage_Core_Model_Email
 {
     /**
-     * Send Email
+     *
+     *
      *
      * @return Pulchritudinous_Email_Model_Core_Email
      */
@@ -22,6 +23,23 @@ Class Pulchritudinous_Email_Model_Core_Email
             return parent::send();
         }
 
-        $email = Mage::getModel('pulchemail/email');
+        $helper = Mage::helper('pulchemail');
+
+        $mail = new Zend_Mail();
+        $mail::setDefaultTransport($helper->getActiveTransporter());
+
+        if (strtolower($this->getType()) == 'html') {
+            $mail->setBodyHtml($this->getBody());
+        } else {
+            $mail->setBodyText($this->getBody());
+        }
+
+        $mail->setFrom($this->getFromEmail(), $this->getFromName())
+            ->addTo($this->getToEmail(), $this->getToName())
+            ->setSubject($this->getSubject());
+        $mail->send();
+
+        return $this;
     }
+
 }

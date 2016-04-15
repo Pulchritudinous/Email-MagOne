@@ -68,12 +68,12 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
      *
      * @return array
      */
-    public function getRecipients()
+    public function _getRecipients()
     {
-        $recipients = parent::getRecipients();
+        $recipients = parent::_getRecipients();
 
         foreach ($recipients as &$recipient) {
-            $recipient[] = [
+            $recipient = [
                 'address' => $recipient
             ];
         }
@@ -88,7 +88,7 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
      */
     protected function _getFormat()
     {
-        return ($this->_isHtml) ? 'html' : 'text';
+        return ($this->_mail->getBodyHtml()) ? 'html' : 'text';
     }
 
     /**
@@ -96,7 +96,7 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
      *
      * @return string
      */
-    protected function _getBody()
+    protected function _getAssembledMessage()
     {
         return json_encode([
             'content' => [
@@ -129,6 +129,8 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
         $response =  new Varien_Object(
             json_decode($response, true)
         );
+
+        dahbug::dump($response, null, 10);
 
         if ($response->hasData('errors')) {
             Mage::throwException($response->getData('errors/0/description'));

@@ -78,9 +78,21 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
      *
      * @return array
      */
-    public function getRecipients()
+    public function _getRecipients()
     {
-        return $this->_prepareHeaders['to'];
+        $recipients = [];
+
+        foreach (explode(',', $this->_prepareHeaders['to']) as $recipient) {
+            $recipients[] = preg_replace_callback(
+                '/(.*)<.*>/',
+                function ($matches) {
+                    return iconv_mime_decode($matches[0]);
+                },
+                $recipient
+            );
+        }
+
+        return implode(',', $recipients);
     }
 
     /**

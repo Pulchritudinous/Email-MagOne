@@ -34,5 +34,33 @@
 class Pulchritudinous_Email_Helper_Data
     extends Mage_Core_Helper_Abstract
 {
+    /**
+     *
+     *
+     *
+     * @return Pulchritudinous_Email_Model_Transporter_Abstract
+     */
+    public function getActiveTransporter()
+    {
+        $config         = Mage::helper('pulchemail/config');
+        $transporter    = $config->getTransporter();
+        $coreConfig     = Mage::getModel('core/config');
 
+        switch ($transporter) {
+            case "sparkpost":
+                $model = Mage::getModel('pulchemail/transporter_sparkpost');
+                break;
+            case "postmark":
+                $model = Mage::getModel('pulchemail/transporter_postmark');
+                break;
+            case "mandrill":
+                $model = Mage::getModel('pulchemail/transporter_mandrill');
+                break;
+            default:
+                Mage::throwException("No transporter model found");
+                break;
+        }
+
+        return $model;
+    }
 }

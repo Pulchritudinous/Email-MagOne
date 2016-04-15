@@ -205,7 +205,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
 
             $recipients[] = [
                 'email' => $email,
-                'name'  => $name
+                'name'  => iconv_mime_decode($name)
             ];
         }
 
