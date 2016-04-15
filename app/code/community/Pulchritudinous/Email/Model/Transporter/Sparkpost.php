@@ -130,8 +130,6 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
             json_decode($response, true)
         );
 
-        dahbug::dump($response, null, 10);
-
         if ($response->hasData('errors')) {
             Mage::throwException($response->getData('errors/0/description'));
         }
