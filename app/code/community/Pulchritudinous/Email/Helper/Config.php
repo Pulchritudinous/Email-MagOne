@@ -72,17 +72,11 @@ class Pulchritudinous_Email_Helper_Config
     /**
      * Get development settins.
      *
-     * @param  integer $store
-     *
      * @return string
      */
-    public function getDevelopmentSettings($store = null)
+    public function getDevelopmentSettings()
     {
-        if (is_null($store)) {
-            $store = Mage::app()->getStore()->getId();
-        }
-
-        $config     = Mage::getStoreConfig('pulchemail/development', $store);
+        $config     = Mage::getStoreConfig('pulchemail/development');
         $config     = new Varien_Object($config);
 
         Mage::dispatchEvent(

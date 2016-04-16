@@ -42,35 +42,35 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     protected $_settings;
 
     /**
-     *
+     * Decodes headers.
      *
      * @var array
      */
     protected $_preparedHeaders = [];
 
     /**
-     *
+     * API URL.
      *
      * @return string
      */
     abstract protected function _getUrl();
 
     /**
-     *
+     * Extra request headers to append to CURL.
      *
      * @return array
      */
     abstract protected function _getExtraHeader();
 
     /**
-     *
+     * Messages string to send through CURL.
      *
      * @return string
      */
     abstract protected function _getAssembledMessage();
 
-     /**
-     *
+    /**
+     * Check the API response for any errors something unexpected.
      *
      * @param  string $response
      *
@@ -81,14 +81,14 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     abstract protected function _processResponse($response);
 
     /**
-     *
+     * Transporter code.
      *
      * @var string
      */
     protected $_code;
 
     /**
-     *
+     * Initial configuration.
      */
     public function __construct()
     {
@@ -100,7 +100,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     * Set transporter configuration
+     * Set transporter configuration.
      *
      * @param Varien_Object $config
      *
@@ -114,7 +114,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     * Get transporter configuration
+     * Get transporter configuration.
      *
      * @return Varien_Object
      */
@@ -124,7 +124,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     * Get API Key
+     * Get API Key.
      *
      * @return string|null
      */
@@ -138,7 +138,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     *
+     * Debode Zend headers.
      *
      * @param array $headers
      */
@@ -164,7 +164,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     *
+     * Parse the from address.
      *
      * @return Varien_Object
      */
@@ -181,7 +181,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     *
+     * Message subject.
      *
      * @return string
      */
@@ -191,7 +191,9 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
+     * Parse all email recipients.
      *
+     * If email hogging is enabled all emails will go to the specifed address.
      *
      * @return array
      */
@@ -225,7 +227,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     *
+     * Prepare email to be sent.
      *
      * @param  Zend_Mail $mail
      */
@@ -248,7 +250,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     *
+     * Parses the email body.
      *
      * @return string
      */
@@ -262,7 +264,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     *
+     * CURL headers.
      *
      * @return array
      */
@@ -278,7 +280,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     *
+     * Checks if the value is a valid JSON string.
      *
      * @param  string $string
      *
@@ -295,7 +297,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     *
+     * Sending API call through CURL.
      *
      * @return string
      */

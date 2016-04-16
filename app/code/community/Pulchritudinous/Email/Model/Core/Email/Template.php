@@ -10,7 +10,9 @@ Class Pulchritudinous_Email_Model_Core_Email_Template
     extends Mage_Core_Model_Email_Template
 {
     /**
+     * Zend email class.
      *
+     * Sets the default transporter if active.
      *
      * @return Zend_Mail
      */

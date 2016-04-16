@@ -25,7 +25,7 @@
 ?>
 <?php
 /**
- *
+ * Postmark transporter model for Zend Framework 1.
  *
  * @package Pulchritudinous_Email
  * @module  Pulchritudinous
@@ -34,15 +34,15 @@
 class Pulchritudinous_Email_Model_Transporter_Postmark
     extends Pulchritudinous_Email_Model_Transporter_Abstract
 {
-     /**
-     *
+    /**
+     * Transporter code.
      *
      * @var string
      */
     protected $_code = 'postmark';
 
     /**
-     *
+     * API URL.
      *
      * @return string
      */
@@ -52,7 +52,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     }
 
     /**
-     *
+     * Extra request headers to append to CURL.
      *
      * @return array
      */
@@ -64,7 +64,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     }
 
     /**
-     *
+     * Checks if the message is based on HTML or text.
      *
      * @return string
      */
@@ -74,7 +74,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     }
 
     /**
-     *
+     * Parse all email recipients.
      *
      * @return array
      */
@@ -93,7 +93,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     }
 
     /**
-     *
+     * Messages string to send through CURL.
      *
      * @return string
      */

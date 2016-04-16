@@ -25,6 +25,7 @@
 ?>
 <?php
 /**
+ * Mandril transporter model for Zend Framework 1.
  *
  *
  * @package Pulchritudinous_Email
@@ -35,14 +36,14 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
     extends Pulchritudinous_Email_Model_Transporter_Abstract
 {
     /**
-     *
+     * Transporter code.
      *
      * @var string
      */
     protected $_code = 'mandrill';
 
     /**
-     *
+     * API URL.
      *
      * @return string
      */
@@ -52,7 +53,7 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
     }
 
     /**
-     *
+     * Extra request headers to append to CURL.
      *
      * @return array
      */
@@ -62,7 +63,7 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
     }
 
     /**
-     *
+     * Checks if the email is based on HTML or text.
      *
      * @return string
      */
@@ -72,7 +73,7 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
     }
 
     /**
-     *
+     * Check the API response for any errors something unexpected.
      *
      * @param  string $response
      *
@@ -98,7 +99,7 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
     }
 
     /**
-     *
+     * Messages string to send through CURL.
      *
      * @return string
      */

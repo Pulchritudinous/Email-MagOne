@@ -25,7 +25,7 @@
 ?>
 <?php
 /**
- *
+ * Sparkpost transporter model for Zend Framework 1.
  *
  * @package Pulchritudinous_Email
  * @module  Pulchritudinous
@@ -35,14 +35,14 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     extends Pulchritudinous_Email_Model_Transporter_Abstract
 {
     /**
-     *
+     * Transporter code.
      *
      * @var string
      */
     protected $_code = 'sparkpost';
 
     /**
-     *
+     * API URL.
      *
      * @return string
      */
@@ -52,7 +52,7 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     }
 
     /**
-     *
+     * Extra request headers to append to CURL.
      *
      * @return array
      */
@@ -64,7 +64,7 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     }
 
     /**
-     *
+     * Parse all email recipients.
      *
      * @return array
      */
@@ -82,7 +82,7 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     }
 
     /**
-     *
+     * Checks if the message is based on HTML or text.
      *
      * @return string
      */
@@ -92,7 +92,7 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     }
 
     /**
-     *
+     * Messages string to send through CURL.
      *
      * @return string
      */
@@ -112,7 +112,7 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     }
 
     /**
-     *
+     * Check the API response for any errors something unexpected.
      *
      * @param  string $response
      *

@@ -10,8 +10,7 @@ Class Pulchritudinous_Email_Model_Core_Email
     extends Mage_Core_Model_Email
 {
     /**
-     *
-     *
+     * Sends a message.
      *
      * @return Pulchritudinous_Email_Model_Core_Email
      */
