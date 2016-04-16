@@ -68,4 +68,29 @@ class Pulchritudinous_Email_Helper_Config
 
         return (bool)Mage::getStoreConfigFlag("pulchemail/general/enabled", $store);
     }
+
+    /**
+     * Get development settins.
+     *
+     * @param  integer $store
+     *
+     * @return string
+     */
+    public function getDevelopmentSettings($store = null)
+    {
+        if (is_null($store)) {
+            $store = Mage::app()->getStore()->getId();
+        }
+
+        $config     = Mage::getStoreConfig('pulchemail/development', $store);
+        $config     = new Varien_Object($config);
+
+        Mage::dispatchEvent(
+            'pulchemail_get_development_config',
+            ['config' => $config]
+        );
+
+        return $config;
+    }
 }
+

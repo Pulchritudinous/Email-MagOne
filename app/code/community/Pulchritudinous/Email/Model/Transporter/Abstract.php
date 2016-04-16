@@ -197,6 +197,18 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      */
     protected function _getRecipients()
     {
+        $config = Mage::helper('pulchemail/config')
+            ->getDevelopmentSettings();
+
+        if ($config->getHogAllEmails()) {
+            return [
+                [
+                    'email' => $config->getToEmail(),
+                    'name'  => $config->getToName(),
+                ]
+            ];
+        }
+
         $recipients = [];
 
         foreach (explode(',', $this->_prepareHeaders['to']) as $recipient) {

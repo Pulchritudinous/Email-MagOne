@@ -80,16 +80,13 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
      */
     public function _getRecipients()
     {
-        $recipients = [];
+        $recipients = parent::_getRecipients();
 
-        foreach (explode(',', $this->_prepareHeaders['to']) as $recipient) {
-            $recipients[] = preg_replace_callback(
-                '/(.*)<.*>/',
-                function ($matches) {
-                    return iconv_mime_decode($matches[0]);
-                },
-                $recipient
-            );
+        foreach ($recipients as &$recipient) {
+            $name   = $recipient['name'];
+            $email  = $recipient['email'];
+
+            $recipient = "{$name} <{$email}>";
         }
 
         return implode(',', $recipients);
