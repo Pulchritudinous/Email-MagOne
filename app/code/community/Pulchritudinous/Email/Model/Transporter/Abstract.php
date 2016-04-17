@@ -25,7 +25,7 @@
 ?>
 <?php
 /**
- *
+ * Abstract transporter model for Zend Framework 1.
  *
  * @package Pulchritudinous_Email
  * @module  Pulchritudinous
@@ -170,7 +170,8 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      */
     protected function _getFrom()
     {
-        preg_match('/(.*)<(.*)>/', $this->_prepareHeaders['from'], $matches);
+        $from = (isset($this->_prepareHeaders['from'])) ? $this->_prepareHeaders['from'] : '';
+        preg_match('/(.*)<(.*)>/', $from, $matches);
 
         list(, $name, $email) = $matches;
 
@@ -187,7 +188,9 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      */
     protected function _getSubject()
     {
-        return $this->_prepareHeaders['subject'];
+        return (isset($this->_prepareHeaders['subject']))
+            ? $this->_prepareHeaders['subject']
+            : '';
     }
 
     /**
@@ -212,8 +215,73 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
         }
 
         $recipients = [];
+        $to = (isset($this->_prepareHeaders['to'])) ? $this->_prepareHeaders['to'] : '';
 
-        foreach (explode(',', $this->_prepareHeaders['to']) as $recipient) {
+        foreach (explode(',', $to) as $recipient) {
+            preg_match('/(.*)<(.*)>/', $recipient, $matches);
+            list(, $name, $email) = $matches;
+
+            $recipients[] = [
+                'email' => $email,
+                'name'  => iconv_mime_decode($name)
+            ];
+        }
+
+        return $recipients;
+    }
+
+    /**
+     * Parse all cc email recipients.
+     *
+     * If email hogging is enabled no cc addresses will be added.
+     *
+     * @return array
+     */
+    protected function _getCcRecipients()
+    {
+        $config = Mage::helper('pulchemail/config')
+            ->getDevelopmentSettings();
+
+        if ($config->getHogAllEmails()) {
+            return [[]];
+        }
+
+        $recipients = [];
+        $to = (isset($this->_prepareHeaders['cc'])) ? $this->_prepareHeaders['cc'] : '';
+
+        foreach (explode(',', $to) as $recipient) {
+            preg_match('/(.*)<(.*)>/', $recipient, $matches);
+            list(, $name, $email) = $matches;
+
+            $recipients[] = [
+                'email' => $email,
+                'name'  => iconv_mime_decode($name)
+            ];
+        }
+
+        return $recipients;
+    }
+
+    /**
+     * Parse all bcc email recipients.
+     *
+     * If email hogging is enabled no bcc addresses will be added.
+     *
+     * @return array
+     */
+    protected function _getBccRecipients()
+    {
+        $config = Mage::helper('pulchemail/config')
+            ->getDevelopmentSettings();
+
+        if ($config->getHogAllEmails()) {
+            return [[]];
+        }
+
+        $recipients = [];
+        $to = (isset($this->_prepareHeaders['bcc'])) ? $this->_prepareHeaders['bcc'] : '';
+
+        foreach (explode(',', $to) as $recipient) {
             preg_match('/(.*)<(.*)>/', $recipient, $matches);
             list(, $name, $email) = $matches;
 

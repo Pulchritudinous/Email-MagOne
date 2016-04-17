@@ -27,7 +27,6 @@
 /**
  * Mandril transporter model for Zend Framework 1.
  *
- *
  * @package Pulchritudinous_Email
  * @module  Pulchritudinous
  * @author  Anton Samuelsson <samuelsson.anton@gmail.com>
@@ -60,6 +59,28 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
     protected function _getExtraHeader()
     {
         return [];
+    }
+
+    /**
+     * Parse all email recipients.
+     *
+     * @return array
+     */
+    public function _getRecipients()
+    {
+        $recipients = parent::_getRecipients();
+
+        foreach ($this->_getCcRecipients() as $recipient) {
+            $recipient['type'] = 'cc';
+            $recipients[] = $recipient;
+        }
+
+        foreach ($this->_getBccRecipients() as $recipient) {
+            $recipient['type'] = 'bcc';
+            $recipients[] = $recipient;
+        }
+
+        return array_values($recipients);
     }
 
     /**

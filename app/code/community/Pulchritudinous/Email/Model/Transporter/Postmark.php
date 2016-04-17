@@ -78,9 +78,51 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
      *
      * @return array
      */
-    public function _getRecipients()
+    protected function _getRecipients()
     {
         $recipients = parent::_getRecipients();
+
+        foreach ($recipients as &$recipient) {
+            $name   = $recipient['name'];
+            $email  = $recipient['email'];
+
+            $recipient = "{$name} <{$email}>";
+        }
+
+        return implode(',', $recipients);
+    }
+
+    /**
+     * Parse all bcc email recipients.
+     *
+     * If email hogging is enabled no bcc addresses will be added.
+     *
+     * @return array
+     */
+    protected function _getBccRecipients()
+    {
+        $recipients = parent::_getBccRecipients();
+
+        foreach ($recipients as &$recipient) {
+            $name   = $recipient['name'];
+            $email  = $recipient['email'];
+
+            $recipient = "{$name} <{$email}>";
+        }
+
+        return implode(',', $recipients);
+    }
+
+    /**
+     * Parse all cc email recipients.
+     *
+     * If email hogging is enabled no bcc addresses will be added.
+     *
+     * @return array
+     */
+    protected function _getCcRecipients()
+    {
+        $recipients = parent::_getCcRecipients();
 
         foreach ($recipients as &$recipient) {
             $name   = $recipient['name'];
@@ -101,16 +143,26 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     {
         $from = "{$this->_getFrom()->getName()} <{$this->_getFrom()->getEmail()}>";
 
-        return json_encode([
+        $message = [
             'From'              => $from,
             'To'                => $this->_getRecipients(),
             'Subject'           => $this->_getSubject(),
             $this->_getFormat() => $this->_getBody()
-        ]);
+        ];
+
+        if ($bcc = $this->_getBccRecipients()) {
+            $message['Bcc'] = $bcc;
+        }
+
+        if ($cc = $this->_getCcRecipients()) {
+            $message['Cc'] = $cc;
+        }
+
+        return json_encode($message);
     }
 
     /**
-     *
+     * Check the API response for any errors something unexpected.
      *
      * @param  string $response
      *
