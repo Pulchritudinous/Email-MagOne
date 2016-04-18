@@ -135,6 +135,26 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     }
 
     /**
+     * Returns content of attachments.
+     *
+     * @return array
+     */
+    protected function _getAttachments()
+    {
+        $attachments = parent::_getAttachments();
+
+        foreach ($attachments as &$attachment) {
+            $attachment = [
+                'Name'          => $attachment['filename'],
+                'Content'       => $attachment['content'],
+                'ContentType'   => $attachment['type'],
+            ];
+        }
+
+        return $attachments;
+    }
+
+    /**
      * Messages string to send through CURL.
      *
      * @return string
@@ -156,6 +176,10 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
 
         if ($cc = $this->_getCcRecipients()) {
             $message['Cc'] = $cc;
+        }
+
+        if ($attachments = $this->_getAttachments()) {
+            $message['Attachments'] = $attachments;
         }
 
         return json_encode($message);
