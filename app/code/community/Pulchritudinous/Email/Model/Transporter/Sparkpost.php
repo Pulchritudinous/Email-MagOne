@@ -92,13 +92,33 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     }
 
     /**
+     * Returns content of attachments.
+     *
+     * @return array
+     */
+    protected function _getAttachments()
+    {
+        $attachments = parent::_getAttachments();
+
+        foreach ($attachments as &$attachment) {
+            $attachment = [
+                'name'      => $attachment['filename'],
+                'data'      => $attachment['content'],
+                'type'      => $attachment['type'],
+            ];
+        }
+
+        return $attachments;
+    }
+
+    /**
      * Messages string to send through CURL.
      *
      * @return string
      */
     protected function _getAssembledMessage()
     {
-        return json_encode([
+        $message = [
             'content' => [
                 'from'  => [
                     'name'  => $this->_getFrom()->getName(),
@@ -108,7 +128,13 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
                 $this->_getFormat() => $this->_getBody()
             ],
             'recipients'    => $this->_getRecipients()
-        ]);
+        ];
+
+        if ($attachments = $this->_getAttachments()) {
+            $message['content']['attachments'] = $attachments;
+        }
+
+        return json_encode($message);
     }
 
     /**
