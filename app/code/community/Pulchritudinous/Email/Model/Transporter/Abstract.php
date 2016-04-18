@@ -49,6 +49,13 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     protected $_preparedHeaders = [];
 
     /**
+     * Prepared attachments.
+     *
+     * @var array
+     */
+    protected $_preparedAttachments = [];
+
+    /**
      * API URL.
      *
      * @return string
@@ -138,9 +145,11 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
-     * Debode Zend headers.
+     * Decode Zend headers.
      *
-     * @param array $headers
+     * @param  array $headers
+     *
+     * @return Pulchritudinous_Email_Model_Transporter_Abstract
      */
     protected function _prepareHeaders($headers)
     {
@@ -161,6 +170,37 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
         }
 
         return $this;
+    }
+
+    /**
+     * Prepare attachments.
+     *
+     * @param  array $parts
+     *
+     * @return Pulchritudinous_Email_Model_Transporter_Abstract
+     */
+    protected function _prepareAttachments($parts)
+    {
+        foreach ($parts as $part) {
+            $this->_preparedAttachments[] = [
+                'type'      => $part->type,
+                'filename'  => $part->filename,
+                'content'   => $part->getContent(Zend_Mime::LINEEND),
+                'raw'       => $part->getRawContent(),
+            ];
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns content of attachments.
+     *
+     * @return array
+     */
+    protected function _getAttachments()
+    {
+        return $this->_preparedAttachments;
     }
 
     /**
@@ -306,6 +346,10 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
         $message        = new Zend_Mime_Message();
 
         $this->_buildBody();
+
+        $parts = $mail->getParts();
+
+        $this->_prepareAttachments($parts);
 
         $message->setParts($this->_parts);
         $message->setMime($mime);
