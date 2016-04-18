@@ -120,13 +120,33 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
     }
 
     /**
+     * Returns content of attachments.
+     *
+     * @return array
+     */
+    protected function _getAttachments()
+    {
+        $attachments = parent::_getAttachments();
+
+        foreach ($attachments as &$attachment) {
+            $attachment = [
+                'name'      => $attachment['filename'],
+                'content'   => $attachment['content'],
+                'type'      => $attachment['type'],
+            ];
+        }
+
+        return $attachments;
+    }
+
+    /**
      * Messages string to send through CURL.
      *
      * @return string
      */
     protected function _getAssembledMessage()
     {
-        return json_encode([
+        $message = [
             'key'       => $this->getConfig()->getKey(),
             'message'   => [
                 'subject'           => $this->_getSubject(),
@@ -135,7 +155,13 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
                 'to'                => $this->_getRecipients(),
                 $this->_getFormat() => $this->_getBody()
             ],
-        ]);
+        ];
+
+        if ($attachments = $this->_getAttachments()) {
+            $message['message']['attachments'] = $attachments;
+        }
+
+        return json_encode($message);
     }
 }
 
