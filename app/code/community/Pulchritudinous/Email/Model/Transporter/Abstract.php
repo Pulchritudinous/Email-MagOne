@@ -451,6 +451,14 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      */
     public function _sendMail()
     {
+        $config = Mage::helper('pulchemail/config')
+            ->getDevelopmentSettings();
+
+        if ($config->getEmailTurnedOff()) {
+            Mage::log("Mail was so not sent. You are safe!");
+            return "{}";
+        }
+
         $curl       = new Varien_Http_Adapter_Curl();
         $httpVer    = Zend_Http_Client::HTTP_1;
 

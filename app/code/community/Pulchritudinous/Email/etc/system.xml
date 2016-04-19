@@ -82,9 +82,19 @@
                     <show_in_website>0</show_in_website>
                     <show_in_store>0</show_in_store>
                     <fields>
+                        <email_turned_off translate="label">
+                            <label>Turn of all emailing</label>
+                            <sort_order>10</sort_order>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment><![CDATA[Stops all emails from beeing sent. No email will be sent what so ever. NONE! NADA!!]]></comment>
+                        </email_turned_off>
                         <hog_all_emails translate="label">
                             <label>Hog all emails</label>
-                            <sort_order>10</sort_order>
+                            <sort_order>20</sort_order>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
@@ -94,7 +104,7 @@
                         </hog_all_emails>
                         <to_name translate="label comment">
                             <label>"To" recipient name</label>
-                            <sort_order>20</sort_order>
+                            <sort_order>30</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -105,7 +115,7 @@
                         </to_name>
                         <to_email translate="label comment">
                             <label>"To" Email address</label>
-                            <sort_order>30</sort_order>
+                            <sort_order>40</sort_order>
                             <frontend_type>text</frontend_type>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
