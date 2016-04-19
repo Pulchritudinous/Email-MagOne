@@ -211,14 +211,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     protected function _getFrom()
     {
         $from = (isset($this->_prepareHeaders['from'])) ? $this->_prepareHeaders['from'] : '';
-        preg_match('/(.*)<(.*)>/', $from, $matches);
-
-        list(, $name, $email) = $matches;
-
-        return new Varien_Object([
-            'name'      => $name,
-            'email'     => $email,
-        ]);
+        return new Varien_Object($this->_parseFlattenRecipient($from));
     }
 
     /**
@@ -258,13 +251,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
         $to = (isset($this->_prepareHeaders['to'])) ? $this->_prepareHeaders['to'] : '';
 
         foreach (explode(',', $to) as $recipient) {
-            preg_match('/(.*)<(.*)>/', $recipient, $matches);
-            list(, $name, $email) = $matches;
-
-            $recipients[] = [
-                'email' => $email,
-                'name'  => iconv_mime_decode($name)
-            ];
+            $recipients[] =  $this->_parseFlattenRecipient($recipient);
         }
 
         return $recipients;
@@ -290,13 +277,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
         $to = (isset($this->_prepareHeaders['cc'])) ? $this->_prepareHeaders['cc'] : '';
 
         foreach (explode(',', $to) as $recipient) {
-            preg_match('/(.*)<(.*)>/', $recipient, $matches);
-            list(, $name, $email) = $matches;
-
-            $recipients[] = [
-                'email' => $email,
-                'name'  => iconv_mime_decode($name)
-            ];
+            $recipients[] =  $this->_parseFlattenRecipient($recipient);
         }
 
         return $recipients;
@@ -322,16 +303,71 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
         $to = (isset($this->_prepareHeaders['bcc'])) ? $this->_prepareHeaders['bcc'] : '';
 
         foreach (explode(',', $to) as $recipient) {
-            preg_match('/(.*)<(.*)>/', $recipient, $matches);
-            list(, $name, $email) = $matches;
-
-            $recipients[] = [
-                'email' => $email,
-                'name'  => iconv_mime_decode($name)
-            ];
+            $recipients[] =  $this->_parseFlattenRecipient($recipient);
         }
 
         return $recipients;
+    }
+
+    /**
+     * Converts a recipient string into an array.
+     *
+     * @param  string $recipient
+     *
+     * @return array
+     */
+    protected function _parseFlattenRecipient($recipient)
+    {
+        if (preg_match('/(.*)<(.*)>/', $recipient, $matches)) {
+            list(, $name, $email) = $matches;
+
+            return [
+                'name'  => iconv_mime_decode($name),
+                'email' => $email,
+            ];
+        }
+
+        return [
+            'email' => $recipient,
+        ];
+    }
+
+    /**
+     * Flattens an array of recipients to a comma separated string.
+     *
+     * @param  array $recipients
+     *
+     * @return string
+     */
+    protected function _getFlattenRecipients(array $recipients)
+    {
+         foreach ($recipients as &$recipient) {
+            $recipient = $this->_getRecipientString($recipient);
+        }
+
+        return implode(',', $recipients);
+    }
+
+    /**
+     * Returns an recipient as a string.
+     *
+     * @param  string|array $email
+     * @param  string       $name
+     *
+     * @return string
+     */
+    protected function _getRecipientString($email, $name = null)
+    {
+        if (is_array($email)) {
+            $name   = (isset($email['name'])) ? $email['name'] : null;
+            $email  = (isset($email['email'])) ? $email['email'] : '';
+        }
+
+        if ($name) {
+            return $recipient = "{$name} <{$email}>";
+        }
+
+        return $email;
     }
 
     /**

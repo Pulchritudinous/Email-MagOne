@@ -82,14 +82,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     {
         $recipients = parent::_getRecipients();
 
-        foreach ($recipients as &$recipient) {
-            $name   = $recipient['name'];
-            $email  = $recipient['email'];
-
-            $recipient = "{$name} <{$email}>";
-        }
-
-        return implode(',', $recipients);
+        return dahbug::dump($this->_getFlattenRecipients($recipients));
     }
 
     /**
@@ -103,14 +96,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     {
         $recipients = parent::_getBccRecipients();
 
-        foreach ($recipients as &$recipient) {
-            $name   = $recipient['name'];
-            $email  = $recipient['email'];
-
-            $recipient = "{$name} <{$email}>";
-        }
-
-        return implode(',', $recipients);
+        return $this->_getFlattenRecipients($recipients);
     }
 
     /**
@@ -124,14 +110,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     {
         $recipients = parent::_getCcRecipients();
 
-        foreach ($recipients as &$recipient) {
-            $name   = $recipient['name'];
-            $email  = $recipient['email'];
-
-            $recipient = "{$name} <{$email}>";
-        }
-
-        return implode(',', $recipients);
+        return $this->_getFlattenRecipients($recipients);
     }
 
     /**
