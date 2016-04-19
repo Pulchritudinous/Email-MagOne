@@ -82,7 +82,7 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
     {
         $recipients = parent::_getRecipients();
 
-        return dahbug::dump($this->_getFlattenRecipients($recipients));
+        return $this->_getFlattenRecipients($recipients);
     }
 
     /**

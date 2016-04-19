@@ -71,11 +71,19 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
         $recipients = parent::_getRecipients();
 
         foreach ($this->_getCcRecipients() as $recipient) {
+            if (!$recipient['email']) {
+                continue;
+            }
+
             $recipient['type'] = 'cc';
             $recipients[] = $recipient;
         }
 
         foreach ($this->_getBccRecipients() as $recipient) {
+            if (!$recipient['email']) {
+                continue;
+            }
+
             $recipient['type'] = 'bcc';
             $recipients[] = $recipient;
         }

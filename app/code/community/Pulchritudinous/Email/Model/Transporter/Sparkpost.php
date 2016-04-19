@@ -112,6 +112,26 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
     }
 
     /**
+     *
+     *
+     * @return array
+     */
+    protected function _getExtraMessageHeaders()
+    {
+        $extra = [];
+
+        if ($cc = $this->_getCcRecipients()) {
+            $extra['cc'] = $this->_getFlattenRecipients($cc);
+        }
+
+        if ($bcc = $this->_getBccRecipients()) {
+            $extra['bcc'] = $this->_getFlattenRecipients($bcc);
+        }
+
+        return array_filter($extra);
+    }
+
+    /**
      * Messages string to send through CURL.
      *
      * @return string
@@ -132,6 +152,10 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
 
         if ($attachments = $this->_getAttachments()) {
             $message['content']['attachments'] = $attachments;
+        }
+
+        if ($extra = $this->_getExtraMessageHeaders()) {
+            $message['content']['headers'] = $extra;
         }
 
         return json_encode($message);

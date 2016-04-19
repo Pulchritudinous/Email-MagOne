@@ -222,7 +222,7 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     protected function _getSubject()
     {
         return (isset($this->_prepareHeaders['subject']))
-            ? $this->_prepareHeaders['subject']
+            ? iconv_mime_decode($this->_prepareHeaders['subject'])
             : '';
     }
 
