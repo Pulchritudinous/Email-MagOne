@@ -165,6 +165,10 @@ class Pulchritudinous_Email_Model_Transporter_Mandrill
             ],
         ];
 
+        if ($replyTo = $this->_getRecipientString($this->_getReplyToRecipient())) {
+            $message['message']['headers'] = ['Reply-To' => $replyTo];
+        }
+
         if ($attachments = $this->_getAttachments()) {
             $message['message']['attachments'] = $attachments;
         }

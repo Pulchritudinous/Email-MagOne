@@ -149,6 +149,10 @@ class Pulchritudinous_Email_Model_Transporter_Postmark
             $this->_getFormat() => $this->_getBody()
         ];
 
+        if ($replyTo = $this->_getRecipientString($this->_getReplyToRecipient())) {
+            $message['ReplyTo'] = $replyTo;
+        }
+
         if ($bcc = $this->_getBccRecipients()) {
             $message['Bcc'] = $bcc;
         }

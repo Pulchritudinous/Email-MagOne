@@ -150,6 +150,10 @@ class Pulchritudinous_Email_Model_Transporter_Sparkpost
             'recipients'    => $this->_getRecipients()
         ];
 
+        if ($replyTo = $this->_getRecipientString($this->_getReplyToRecipient())) {
+            $message['content']['reply_to'] = $replyTo;
+        }
+
         if ($attachments = $this->_getAttachments()) {
             $message['content']['attachments'] = $attachments;
         }

@@ -310,6 +310,20 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
     }
 
     /**
+     * Parse reply-to email.
+     *
+     * @return array
+     */
+    protected function _getReplyToRecipient()
+    {
+        $config = Mage::helper('pulchemail/config')
+            ->getDevelopmentSettings();
+
+        $replyTo = (isset($this->_prepareHeaders['reply-to'])) ? $this->_prepareHeaders['reply-to'] : '';
+        return $this->_parseFlattenRecipient($replyTo);
+    }
+
+    /**
      * Converts a recipient string into an array.
      *
      * @param  string $recipient
