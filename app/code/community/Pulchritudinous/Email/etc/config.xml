@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 /**
- *
+ * Module configuration.
  *
  * @package Pulchritudinous_Email
  * @module  Pulchritudinous
@@ -38,6 +38,11 @@
         </Pulchritudinous_Email>
     </modules>
     <global>
+        <blocks>
+            <pulchemail>
+                <class>Pulchritudinous_Email_Block</class>
+            </pulchemail>
+        </blocks>
         <helpers>
             <pulchemail>
                 <class>Pulchritudinous_Email_Helper</class>
@@ -55,12 +60,27 @@
                 </rewrite>
             </core>
         </models>
-        <blocks>
-            <pulchemail>
-                <class>Pulchritudinous_Email_Block</class>
-            </pulchemail>
-        </blocks>
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Pulchritudinous_Email after="Mage_Adminhtml">Pulchritudinous_Email_Adminhtml</Pulchritudinous_Email>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <pulchemail>
+                    <file>pulchritudinous/email.xml</file>
+                </pulchemail>
+            </updates>
+        </layout>
+    </adminhtml>
     <default>
         <pulchemail>
             <general>

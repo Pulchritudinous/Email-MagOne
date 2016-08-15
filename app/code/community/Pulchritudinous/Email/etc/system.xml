@@ -76,11 +76,11 @@
                     </fields>
                 </general>
                 <development translate="label">
-                    <label>Development Settings</label>
+                    <label>Development Tools</label>
                     <sort_order>150</sort_order>
                     <show_in_default>1</show_in_default>
-                    <show_in_website>0</show_in_website>
-                    <show_in_store>0</show_in_store>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
                     <fields>
                         <email_turned_off translate="label">
                             <label>Turn of all emailing</label>
@@ -124,15 +124,32 @@
                             <depends><hog_all_emails>1</hog_all_emails></depends>
                             <comment><![CDATA[Email address used to send all emails to.]]></comment>
                         </to_email>
+                        <order_email_preview_increment translate="label comment">
+                            <label>Order Email Preview</label>
+                            <sort_order>50</sort_order>
+                            <frontend_type>text</frontend_type>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </order_email_preview_increment>
+                        <order_email_preview translate="label comment">
+                            <button_label>Preview</button_label>
+                            <sort_order>55</sort_order>
+                            <frontend_model>pulchemail/adminhtml_system_config_preview</frontend_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Preview order email by specifying a increment ID.]]></comment>
+                        </order_email_preview>
                     </fields>
                 </development>
                 <transporter_sparkpost>
                     <label>Sparkpost</label>
                     <sort_order>200</sort_order>
                     <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <comment><![CDATA[<a href="https://postmarkapp.com/" target="_blank">https://postmarkapp.com/</a>]]></comment>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
+                    <comment><![CDATA[<a href="https://sparkpost.com/" target="_blank">https://sparkpost.com/</a>]]></comment>
                     <fields>
                         <key>
                             <label>API Key</label>
@@ -149,8 +166,8 @@
                     <label>Postmark</label>
                     <sort_order>300</sort_order>
                     <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
                     <comment><![CDATA[<a href="https://postmarkapp.com/" target="_blank">https://postmarkapp.com/</a>]]></comment>
                     <fields>
                         <key>
@@ -168,8 +185,8 @@
                     <label>Mandrill</label>
                     <sort_order>400</sort_order>
                     <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
+                    <show_in_website>0</show_in_website>
+                    <show_in_store>0</show_in_store>
                     <comment><![CDATA[<a href="https://www.mandrill.com/" target="_blank">https://www.mandrill.com/</a>]]></comment>
                     <fields>
                         <key>

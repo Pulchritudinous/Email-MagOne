@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<layout>
+    <adminhtml_pulchemail_preview>
+        <block type="pulchemail/adminhtml_preview" name="root" output="toHtml" template="pulchritudinous/email/system/config/preview/email.phtml" />
+    </adminhtml_pulchemail_preview>
+</layout>
