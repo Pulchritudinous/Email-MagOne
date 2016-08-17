@@ -25,7 +25,7 @@
 ?>
 <?php
 /**
- *
+ * Order email preview button renderer.
  *
  * @package Pulchritudinous_Email
  * @module  Pulchritudinous
@@ -85,8 +85,7 @@ class Pulchritudinous_Email_Block_Adminhtml_System_Config_Preview
     }
 
     /**
-     *
-     *
+     * Get current store.
      *
      * @return Mage_Core_Model_Store
      */
@@ -101,3 +100,4 @@ class Pulchritudinous_Email_Block_Adminhtml_System_Config_Preview
         return Mage::app()->getStore();
     }
 }
+

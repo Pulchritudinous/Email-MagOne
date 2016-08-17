@@ -86,6 +86,58 @@ class Pulchritudinous_Email_Block_Adminhtml_Preview
     }
 
     /**
+     * Get increment ID.
+     *
+     * @return string
+     */
+    public function getEmailTemplateId()
+    {
+        return $this->getRequest()->getParam('template', 'order');
+    }
+
+    /**
+     * Returns email content.
+     *
+     * @return string
+     */
+    public function getEmailHtml()
+    {
+        try {
+            switch ($this->getEmailTemplateId()) {
+                case 'order_comment':
+                    $html = '';
+                    break;
+                case 'invoice':
+                    $html = '';
+                    break;
+                case 'invoice_comment':
+                    $html = '';
+                    break;
+                case 'shipment':
+                    $html = '';
+                    break;
+                case 'shipment_comment':
+                    $html = '';
+                    break;
+                case 'credit_memo':
+                    $html = $this->getCreditMemoEmailHtml();
+                    break;
+                case 'credit_memo_comment':
+                    $html = '';
+                    break;
+                case 'order':
+                default:
+                    $html = $this->getOrderEmailHtml();
+                    break;
+            }
+        } catch (Exception $e) {
+            $html = $e->getMessage();
+        }
+
+        return $html;
+    }
+
+    /**
      * Get order email HTML.
      *
      * @return string
@@ -126,7 +178,71 @@ class Pulchritudinous_Email_Block_Adminhtml_Preview
             'payment_html' => $paymentBlockHtml
         ];
 
-        $emailTemplate->setDesignConfig(array('area' => 'frontend', 'store' => $this->getStoreId()));
+        $emailTemplate->setDesignConfig(['area' => 'frontend', 'store' => $this->getStoreId()]);
+
+        if (is_numeric($templateId)) {
+            $emailTemplate->load($templateId);
+        } else {
+            $localeCode = Mage::getStoreConfig('general/locale/code', $storeId);
+            $emailTemplate->loadDefault($templateId, $localeCode);
+        }
+
+        return $emailTemplate->getProcessedTemplate($variables);
+    }
+
+    /**
+     * Get Credit Memo email HTML.
+     *
+     * @return string
+     */
+    public function getCreditMemoEmailHtml()
+    {
+        $order          = $this->getOrder();
+        $storeId        = $this->getStoreId();
+        $emailTemplate  = Mage::getModel('core/email_template');
+
+        $appEmulation           = Mage::getSingleton('core/app_emulation');
+        $initialEnvironmentInfo = $appEmulation->startEnvironmentEmulation($storeId);
+
+        if (!$order->hasCreditmemos()) {
+            Mage::throwException("The order does not have any Credit Memo");
+        }
+
+        try {
+            $paymentBlock = Mage::helper('payment')->getInfoBlock($order->getPayment())
+                ->setIsSecureMode(true);
+
+            $paymentBlock->getMethod()->setStore($storeId);
+            $paymentBlockHtml = $paymentBlock->toHtml();
+        } catch (Exception $exception) {
+            $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
+            throw $exception;
+        }
+
+        $appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
+
+        if ($order->getCustomerIsGuest()) {
+            $templateXpath  = Mage_Sales_Model_Order_Creditmemo::XML_PATH_EMAIL_GUEST_TEMPLATE;
+            $templateId     = Mage::getStoreConfig($templateXpath, $storeId);
+            $customerName   = $order->getBillingAddress()->getName();
+        } else {
+            $templateXpath  = Mage_Sales_Model_Order_Creditmemo::XML_PATH_EMAIL_TEMPLATE;
+            $templateId     = Mage::getStoreConfig($templateXpath, $storeId);
+            $customerName   = $order->getCustomerName();
+        }
+
+        $comment    = 'Nunc ornare imperdiet aliquet. Nunc quam arcu, consectetur eu purus a, vehicula tempus quam.';
+        $creditMemo = $order->getCreditmemosCollection()->getFirstItem();
+
+        $variables = [
+            'order'        => $order,
+            'billing'      => $order->getBillingAddress(),
+            'payment_html' => $paymentBlockHtml,
+            'creditmemo'   => $creditMemo,
+            'comment'      => $comment,
+        ];
+
+        $emailTemplate->setDesignConfig(['area' => 'frontend', 'store' => $this->getStoreId()]);
 
         if (is_numeric($templateId)) {
             $emailTemplate->load($templateId);

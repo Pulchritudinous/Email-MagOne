@@ -25,7 +25,7 @@
 ?>
 <?php
 /**
- *
+ * Order email preview template.
  *
  * @package Pulchritudinous_Email
  * @module  Pulchritudinous
@@ -33,7 +33,10 @@
  * @see     Pulchritudinous_Email_Block_Adminhtml_System_Config_Preview
  */
 ?>
-
-<?= $this->getOrderEmailHtml(); ?>
+<?php if (!$this->getIncrementId() || !$this->getOrder() || !$this->getOrder()->getId()): ?>
+    <?= $this->__('Unable to find order %s', $this->getIncrementId()) ?>
+<?php else: ?>
+    <?= $this->getEmailHtml(); ?>
+<?php endif ?>
 
 

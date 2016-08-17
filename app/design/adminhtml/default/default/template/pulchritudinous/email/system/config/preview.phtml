@@ -38,6 +38,7 @@
     function showPopup() {
         var params = {
             increment_id: $('pulchemail_development_order_email_preview_increment').value,
+            template: $('pulchemail_development_order_email_preview_increment_template').value,
             store_id: '<?= $this->getStore()->getId() ?>'
         };
 
