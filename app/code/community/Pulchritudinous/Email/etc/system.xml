@@ -163,7 +163,7 @@
                         <key>
                             <label>API Key</label>
                             <sort_order>10</sort_order>
-                            <frontend_type>obscure</frontend_type>
+                            <frontend_type>text</frontend_type>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -182,7 +182,7 @@
                         <key>
                             <label>API Key</label>
                             <sort_order>10</sort_order>
-                            <frontend_type>obscure</frontend_type>
+                            <frontend_type>text</frontend_type>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
@@ -201,7 +201,7 @@
                         <key>
                             <label>API Key</label>
                             <sort_order>10</sort_order>
-                            <frontend_type>obscure</frontend_type>
+                            <frontend_type>text</frontend_type>
                             <backend_model>adminhtml/system_config_backend_encrypted</backend_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
