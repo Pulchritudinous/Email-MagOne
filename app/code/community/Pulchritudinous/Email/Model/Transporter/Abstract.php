@@ -210,8 +210,21 @@ abstract class Pulchritudinous_Email_Model_Transporter_Abstract
      */
     protected function _getFrom()
     {
-        $from = (isset($this->_prepareHeaders['from'])) ? $this->_prepareHeaders['from'] : '';
-        return new Varien_Object($this->_parseFlattenRecipient($from));
+        $config = Mage::helper('pulchemail/config')
+            ->getDevelopmentSettings();
+
+        $from   = (isset($this->_prepareHeaders['from'])) ? $this->_prepareHeaders['from'] : '';
+        $sender = new Varien_Object($this->_parseFlattenRecipient($from));
+
+        if ($config->getFromName()) {
+            $sender->setName($config->getFromName());
+        }
+
+        if ($config->getFromEmail()) {
+            $sender->setEmail($config->getFromEmail());
+        }
+
+        return $sender;
     }
 
     /**
