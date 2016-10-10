@@ -145,7 +145,7 @@ class Pulchritudinous_Email_Block_Adminhtml_Preview
     public function getOrderEmailHtml()
     {
         $order          = $this->getOrder();
-        $storeId        = $this->getStoreId();
+        $storeId        = $order->getStoreId();
         $emailTemplate  = Mage::getModel('core/email_template');
 
         $appEmulation           = Mage::getSingleton('core/app_emulation');
@@ -178,7 +178,7 @@ class Pulchritudinous_Email_Block_Adminhtml_Preview
             'payment_html' => $paymentBlockHtml
         ];
 
-        $emailTemplate->setDesignConfig(['area' => 'frontend', 'store' => $this->getStoreId()]);
+        $emailTemplate->setDesignConfig(['area' => 'frontend', 'store' => $order->getStoreId()]);
 
         if (is_numeric($templateId)) {
             $emailTemplate->load($templateId);
@@ -198,7 +198,7 @@ class Pulchritudinous_Email_Block_Adminhtml_Preview
     public function getCreditMemoEmailHtml()
     {
         $order          = $this->getOrder();
-        $storeId        = $this->getStoreId();
+        $storeId        = $order->getStoreId();
         $emailTemplate  = Mage::getModel('core/email_template');
 
         $appEmulation           = Mage::getSingleton('core/app_emulation');
@@ -242,7 +242,7 @@ class Pulchritudinous_Email_Block_Adminhtml_Preview
             'comment'      => $comment,
         ];
 
-        $emailTemplate->setDesignConfig(['area' => 'frontend', 'store' => $this->getStoreId()]);
+        $emailTemplate->setDesignConfig(['area' => 'frontend', 'store' => $order->getStoreId()]);
 
         if (is_numeric($templateId)) {
             $emailTemplate->load($templateId);
