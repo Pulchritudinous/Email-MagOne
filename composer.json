@@ -1,0 +1,39 @@
+{
+    "name": "pulchritudinous/email-magone",
+    "type": "magento-module",
+    "description": "Magento Email",
+    "authors": [
+        {
+            "name": "Anton Samuelsson",
+            "email": "samuelsson.anton@gmail.com"
+        },
+        {
+            "name": "Manne Busk",
+            "email": "mannebusk@gmail.com"
+        }
+    ],
+    "require": {
+        "magento-hackathon/magento-composer-installer":"*"
+    },
+    "extra": {
+        "map": [
+            [
+                "app/etc/modules/Pulchritudinous_Email.xml",
+                "app/etc/modules/Pulchritudinous_Email.xml"
+            ],
+            [
+                "app/code/community/Pulchritudinous/Email/",
+                "app/code/community/Pulchritudinous/Email/"
+            ],
+            [
+                "app/design/adminhtml/default/default/layout/pulchritudinous/email.xml",
+                "app/design/adminhtml/default/default/layout/pulchritudinous/email.xml"
+            ],
+            [
+                "app/design/adminhtml/default/default/template/pulchritudinous/email/system/config/",
+                "app/design/adminhtml/default/default/template/pulchritudinous/email/system/config/"
+            ]
+        ]
+    }
+}
+
